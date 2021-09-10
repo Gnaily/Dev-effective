@@ -86,7 +86,8 @@
 
 (define (list-cols conn-holder table-name)
   (define (downcase s)
-     (string-downcase (if (bytes? s) (bytes->string/utf-8 s) s)))
+    (string-downcase (if (bytes? s) (bytes->string/utf-8 s) s)))
+  
   (for/list ([(name
                desc
                data-type
