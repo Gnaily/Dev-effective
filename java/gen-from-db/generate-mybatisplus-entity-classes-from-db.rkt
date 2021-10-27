@@ -1,5 +1,5 @@
 #lang scribble/text
-@(require "../table-model.rkt"
+@(require "../../mysql/table-model.rkt"
           "../../naming-style-conversion.rkt"
           "../../date-util.rkt"
           "./types.rkt")
@@ -11,27 +11,33 @@
                            #:user "root"
                            #:password "a23456")))
 
-@;{;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;generate swagger annotated java code from db for fast copy/paste
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;}
+@;{;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;generate java code
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;}
 
 @(define (field type name comment)
    @list{
 
- @"@"ApiModelProperty(value = "@|comment|")
- @"@"NotNull
- private @|type| @|name|;
+ /**
+ *@|comment|
+ */
+ @(cond [(equal? "id" name) "@TableId(value = \"id\", type = IdType.AUTO)"]
+        [(equal? "create_time" name) @list{@"@"TableField(value = "@|name|", fill = FieldFill.INSERT)}]
+        [(equal? "update_time" name) @list{@"@"TableField(value = "@|name|", fill = FieldFill.INSERT_UPDATE)}]
+        [(equal? "deleted" name) @list{@"@"TableField(value = "@|name|")@"\n"@"@"TableLogic}]
+        [else  @list{@"@"TableField(value = "@|name|")}])
+ private @|type| @(snakecase->camelcase/lower name);
  
  })
 
 @(for/list  ([(table) (in-sequences tables)])
-   
+   "\""
    (define cols (table-column-list table))
    (define (render-cols cols) 
      (map
       (lambda (col)
         ((lambda (type name  desc)
-           (field (java-type-of type) (snakecase->camelcase/lower name) desc))
+           (field (java-type-of type) name desc))
          (column-data-type col)  (column-name col) (column-desc col))) cols))
 
    @list{
@@ -40,9 +46,9 @@
  * @"@"author yangliang <yangliang@"@"xx.com.cn>
  * @"@"date @(now-time-string)
  */
- @"@"ApiModel("@(table-desc table)")
  @"@"Data
- class  @(snakecase->camelcase (table-name table)) {
+ @"@"TableName("@(table-name table)")
+ public class  @(snakecase->camelcase (table-name table)) {
   @(render-cols cols)
  }
  

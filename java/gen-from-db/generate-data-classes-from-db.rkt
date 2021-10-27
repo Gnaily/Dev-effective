@@ -1,5 +1,5 @@
 #lang scribble/text
-@(require "../table-model.rkt"
+@(require "../../mysql/table-model.rkt"
           "../../naming-style-conversion.rkt"
           "../../date-util.rkt"
           "./types.rkt")
