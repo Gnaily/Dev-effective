@@ -1,0 +1,46 @@
+out_trade_no	String	必选	64	商户订单号。
+由商家自定义，64个字符以内，仅支持字母、数字、下划线且需保证在商户端不重复。	20150320010101001
+	total_amount	Price	必选	9	订单总金额。
+单位为元，精确到小数点后两位，取值范围：[0.01,100000000] 。	88.88
+	subject	String	必选	256	订单标题。
+注意：不可使用特殊字符，如 /，=，& 等。	Iphone6 16G
+	product_code	String	可选	64	产品码。
+商家和支付宝签约的产品码。 枚举值（点击查看签约情况）：
+FACE_TO_FACE_PAYMENT：当面付产品；
+默认值为FACE_TO_FACE_PAYMENT。	FACE_TO_FACE_PAYMENT
+	seller_id	String	可选	28	卖家支付宝用户ID。
+当需要指定收款账号时，通过该参数传入，如果该值为空，则默认为商户签约账号对应的支付宝用户ID。
+收款账号优先级规则：门店绑定的收款账户>请求传入的seller_id>商户签约账号对应的支付宝用户ID；
+注：直付通和机构间联场景下seller_id无需传入或者保持跟pid一致；
+如果传入的seller_id与pid不一致，需要联系支付宝小二配置收款关系；	2088102146225135
+	buyer_id	String	特殊可选	28	买家支付宝用户ID。
+2088开头的16位纯数字，小程序场景下获取用户ID请参考：用户授权;
+其它场景下获取用户ID请参考：网页授权获取用户信息;
+注：交易的买家与卖家不能相同。	2088102146225135
+	body	String	可选	128	订单附加信息。
+如果请求时传递了该参数，将在异步通知、对账单中原样返回，同时会在商户和用户的pc账单详情中作为交易描述展示	Iphone6 16G
+	goods_detail	GoodsDetail[]	可选		订单包含的商品列表信息，json格式。	[{"goods_id":"apple-01","goods_name":"ipad","goods_category":"7788230","price":"2000.00","quantity":"1"}]
+	time_expire	String	可选	32	订单绝对超时时间。
+格式为yyyy-MM-dd HH:mm:ss。
+注：time_expire和timeout_express两者只需传入一个或者都不传，如果两者都传，优先使用time_expire。	2021-12-31 10:05:00
+	timeout_express	String	可选	6	订单相对超时时间。从交易创建时间开始计算。
+该笔订单允许的最晚付款时间，逾期将关闭交易。取值范围：1m～15d。m-分钟，h-小时，d-天，1c-当天（1c-当天的情况下，无论交易何时创建，都在0点关闭）。 该参数数值不接受小数点， 如 1.5h，可转换为 90m。
+当面付场景默认值为3h。
+注：time_expire和timeout_express两者只需传入一个或者都不传，如果两者都传，优先使用time_expire。	90m
+	settle_info	SettleInfo	可选		描述结算信息，json格式。	
+	extend_params	ExtendParams	可选		业务扩展参数	{“sys_service_provider_id”:” 2088511833207846”}
+	business_params	BusinessParams	可选		商户传入业务信息，具体值要和支付宝约定，应用于安全，营销等参数直传场景，格式为json格式	{"data":"123"}
+	discountable_amount	Price	可选	9	可打折金额。
+参与优惠计算的金额，单位为元，精确到小数点后两位，取值范围[0.01,100000000]。
+如果同时传入了【可打折金额】、【不可打折金额】和【订单总金额】，则必须满足如下条件：【订单总金额】=【可打折金额】+【不可打折金额】。
+如果订单金额全部参与优惠计算，则【可打折金额】和【不可打折金额】都无需传入。	80.00
+	undiscountable_amount	Price	可选	9	不可打折金额。
+不参与优惠计算的金额，单位为元，精确到小数点后两位，取值范围[0.01,100000000]。
+如果同时传入了【可打折金额】、【不可打折金额】和【订单总金额】，则必须满足如下条件：【订单总金额】=【可打折金额】+【不可打折金额】。
+如果订单金额全部参与优惠计算，则【可打折金额】和【不可打折金额】都无需传入。	8.88
+	store_id	String	可选	32	商户门店编号。
+指商户创建门店时输入的门店编号。	NJ_001
+	operator_id	String	可选	28	商户操作员编号。	Yx_001
+	terminal_id	String	可选	32	商户机具终端编号。	NJ_T_001
+	logistics_detail	LogisticsDetail	可选		物流信息	
+	receiver_address_info	ReceiverAddressInfo	可选		收货人及地址信息	
