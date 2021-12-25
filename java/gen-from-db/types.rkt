@@ -14,6 +14,7 @@
          '("decimal" . "BigDecimal")
          '("char" . "String")
          '("varchar" . "String")
+         '("json" . "String")
          '("date" . "Date")
          '("datetime" . "Date")
          '("timestamp" . "Date")
