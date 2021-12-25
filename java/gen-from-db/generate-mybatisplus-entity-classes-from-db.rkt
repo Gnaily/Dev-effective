@@ -4,18 +4,28 @@
           "../../date-util.rkt"
           "./types.rkt")
 
-@(define tables (list-tables
-                 (connnect #:server "localhost"
-                           #:port 3306
-                           #:database "custom"
-                           #:user "root"
-                           #:password "a23456")))
-
 @;{;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;generate java code
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;}
 
-@(define (field type name comment)
+@(define (render-table table)
+   @list{
+
+ /**
+ * @(table-desc table)
+ * @"@"author yangliang <yangliang@"@"xx.com.cn>
+ * @"@"date @(now-time-string)
+ */
+ @"@"Data
+ @"@"TableName("@(table-name table)")
+ public class  @(snakecase->camelcase (table-name table)) {
+  @(map render-column (table-column-list table))
+ }
+ 
+ })
+
+
+@(define (java-field type name comment)
    @list{
 
  /**
@@ -30,26 +40,21 @@
  
  })
 
-@(for/list  ([(table) (in-sequences tables)])
-   "\""
-   (define cols (table-column-list table))
-   (define (render-cols cols) 
-     (map
-      (lambda (col)
-        ((lambda (type name  desc)
-           (field (java-type-of type) name desc))
-         (column-data-type col)  (column-name col) (column-desc col))) cols))
 
-   @list{
- /**
- * @(table-desc table)
- * @"@"author yangliang <yangliang@"@"xx.com.cn>
- * @"@"date @(now-time-string)
- */
- @"@"Data
- @"@"TableName("@(table-name table)")
- public class  @(snakecase->camelcase (table-name table)) {
-  @(render-cols cols)
- }
- 
- })
+@(define (render-column col)
+   (let ([type (java-type-of (column-data-type col))]
+         [name (snakecase->camelcase/lower (column-name col))]
+         [desc (column-desc col)])
+     (java-field type name desc)))
+
+
+@(module+ main
+   (define tables (list-tables
+                   (connnect #:server "localhost"
+                             #:port 3306
+                             #:database "custom"
+                             #:user "root"
+                             #:password "a23456")))
+
+   (for/list ([(table) (in-sequences tables)])
+     (render-table table)))
