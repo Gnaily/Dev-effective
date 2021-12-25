@@ -1,0 +1,59 @@
+<tbody>
+                        <tr>
+                            <td>公众账号ID </td>
+                            <td>appid </td>
+                            <td>是 </td>
+                            <td>String(32) </td>
+                            <td>wxd678efh567hg6787</td>
+                            <td>微信支付分配的公众账号ID（企业号corpid即为此appid） </td>
+                        </tr>
+                        <tr>
+                            <td>商户号 </td>
+                            <td>mch_id </td>
+                            <td>是 </td>
+                            <td>String(32)</td>
+                            <td>1230000109 </td>
+                            <td>微信支付分配的商户号 </td>
+                        </tr>
+                        <tr>
+                            <td>微信订单号 </td>
+                            <td>transaction_id </td>
+                            <td rowspan="2">二选一</td>
+                            <td>String(32) </td>
+                            <td>1009660380201506130728806387</td>
+                            <td>微信的订单号，建议优先使用 </td>
+                        </tr>
+                        <tr>
+                            <td>商户订单号 </td>
+                            <td>out_trade_no </td>
+                            <td rowspan="2">二选一</td>                            
+                            <td>String(32)</td>
+                            <td>20150806125346 </td>
+                            <td>商户系统内部订单号，要求32个字符内（最少6个字符），只能是数字、大小写字母_-|*且在同一个商户号下唯一。详见<a target="_blank" href="?chapter=4_2">商户订单号</a> </td>
+                        </tr>
+                        <tr>
+                            <td>随机字符串 </td>
+                            <td>nonce_str </td>
+                            <td>是 </td>
+                            <td>String(32) </td>
+                            <td>C380BEC2BFD727A4B6845133519F3AD6 </td>
+                            <td>随机字符串，不长于32位。推荐<a target="_blank" href="?chapter=4_3">随机数生成算法</a></td>
+                        </tr>
+                        <tr>
+                            <td>签名 </td>
+                            <td>sign </td>
+                            <td>是 </td>
+                            <td>String(32) </td>
+                            <td>5K8264ILTKCH16CQ2502SI8ZNMTM67VS </td>
+                            <td>通过签名算法计算得出的签名值，<a target="_blank" href="?chapter=4_3">详见签名生成算法</a></td>
+                        </tr>
+						<tr>
+                 <td>签名类型</td>
+                 <td>sign_type</td>
+                 <td>否</td>
+                 <td>String(32)</td>
+                 <td>HMAC-SHA256</td>
+                 <td>签名类型，目前支持HMAC-SHA256和MD5，默认为MD5</td>
+              </tr>
+
+                    </tbody>
