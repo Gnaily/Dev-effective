@@ -1,13 +1,11 @@
 #lang scribble/text
 @(require
-   racket/port
    megaparsack
    megaparsack/text
+   "../file-util.rkt"
    "../naming-style-conversion.rkt"
    "../parser-util.rkt")
 
-@(define (file-content file)
-   (port->string (open-input-file file) #:close? #t))
 
 @;{;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;generate java code
@@ -46,6 +44,6 @@
    ; Below is a example
    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
    
-   @(for/list ([(col) (in-sequences (parse 19   (file-content "table-data-example(splited-by-tab).txt")))])
+   @(for/list ([(col) (in-sequences (parse 19   (file->string "table-data-example(splited-by-tab).txt")))])
       (field (list-ref col 1) (list-ref col 0)
              (list-ref col 4) (list-ref col 5) (list-ref col 2) (list-ref col 3))))

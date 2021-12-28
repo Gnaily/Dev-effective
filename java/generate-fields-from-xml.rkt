@@ -1,8 +1,8 @@
 #lang scribble/text
 @(require
-   racket/port
    sxml
    html-parsing
+   "../file-util.rkt"
    "../naming-style-conversion.rkt"
    "../parser-util.rkt")
 
@@ -34,10 +34,6 @@
 
 @(module+ main
 
-   (define (file-content file)
-     (port->string (open-input-file file) #:close? #t))
-
-
    (define (filter-sxml-element list)
      (filter (lambda (e)  (sxml:element? e)) list))
 
@@ -58,7 +54,7 @@
    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
    
    (define xexpr (html->xexp
-                  (file-content "table-data-example.xml")))
+                  (file->string "table-data-example.xml")))
   
    (define table
      (map  (lambda (tr)  (cons 'tr ((sxpath '(td))  tr)))
